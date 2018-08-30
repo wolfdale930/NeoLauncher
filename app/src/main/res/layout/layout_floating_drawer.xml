@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--Root container-->
+    <RelativeLayout
+        android:id="@+id/root_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="UselessParent">
+
+        <!--View while collapsed-->
+        <RelativeLayout
+            android:id="@+id/collapsed_view"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/drawer_icon"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/drawer_icon"
+                tools:ignore="ContentDescription"/>
+
+        </RelativeLayout>
+
+        <!--View after expanding-->
+        <LinearLayout
+            android:id="@+id/expanded_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="50dp">
+
+
+            <GridView
+                android:background="@drawable/drawer_bg"
+                android:padding="10dp"
+                android:id="@+id/app_grid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numColumns="5">
+
+            </GridView>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>
