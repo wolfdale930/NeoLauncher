@@ -7,6 +7,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.PixelFormat;
 import android.os.IBinder;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -44,6 +46,7 @@ public class FloatingViewService extends Service {
         floatingView = LayoutInflater.from(this).inflate(R.layout.layout_floating_drawer,null);
         final View collapsedView = floatingView.findViewById(R.id.collapsed_view);
         final View expandedView = floatingView.findViewById(R.id.expanded_view);
+        final int w_resolution;
         expandedView.setVisibility(View.GONE);
         collapsedView.setVisibility(View.VISIBLE);
 
@@ -53,11 +56,16 @@ public class FloatingViewService extends Service {
         final WindowManager.LayoutParams params = new WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT,WindowManager.LayoutParams.WRAP_CONTENT,WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, PixelFormat.TRANSLUCENT);
 
         params.gravity = Gravity.TOP | Gravity.LEFT;
-        params.x = 20;
-        params.y = 100;
+        params.x = 0;
+        params.y = 0;
 
         windowManager = (WindowManager)getSystemService(WINDOW_SERVICE);
         windowManager.addView(floatingView,params);
+
+        // Finding resolution
+        DisplayMetrics dm = new DisplayMetrics();
+        windowManager.getDefaultDisplay().getMetrics(dm);
+        w_resolution = dm.widthPixels;
         ///////////Loading Launchable Apps/////////////////////
         loadApps();
         ////////////////////Setting adapter///////////////////////
@@ -87,6 +95,7 @@ public class FloatingViewService extends Service {
 
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
+
                 switch (motionEvent.getAction()){
                     case MotionEvent.ACTION_DOWN:
                         initialX = params.x;
@@ -97,12 +106,21 @@ public class FloatingViewService extends Service {
                     case MotionEvent.ACTION_MOVE:
                         params.x = initialX + (int)(motionEvent.getRawX() - initialTouchX);
                         params.y = initialY + (int)(motionEvent.getRawY() - initialTouchY);
+
                         windowManager.updateViewLayout(floatingView,params);
                         return true;
                     case MotionEvent.ACTION_UP:
+                        if (params.x <= w_resolution/2){
+                            params.x = 0;
+                            windowManager.updateViewLayout(floatingView,params);
+                        }
+                        else {
+                            params.x = w_resolution;
+                            windowManager.updateViewLayout(floatingView,params);
+                        }
                         int XDiff = (int)(motionEvent.getRawX() - initialTouchX);
                         int YDiff = (int)(motionEvent.getRawY() - initialTouchY);
-                        if(XDiff<5 && YDiff<5 ){
+                        if(XDiff<2 && YDiff<2 && XDiff>-2 && YDiff>-2 ){
                             if(isViewCollapsed){
                                 expandedView.setVisibility(View.VISIBLE);
                                 isViewCollapsed=false;

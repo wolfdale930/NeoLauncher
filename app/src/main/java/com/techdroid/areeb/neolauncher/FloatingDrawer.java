@@ -2,16 +2,13 @@ package com.techdroid.areeb.neolauncher;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.media.audiofx.BassBoost;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import java.security.Permissions;
 
 public class FloatingDrawer extends Activity {
     private static final int CODE_DRAW_OVER_OTHER_APP_PERMISSION = 2048;
@@ -31,28 +28,36 @@ public class FloatingDrawer extends Activity {
         }
 
     }
+
     private void initializeView(){
+
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startService(new Intent(FloatingDrawer.this,FloatingViewService.class));
             }
         });
+
+        findViewById(R.id.set_desktop).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(FloatingDrawer.this, DesktopActivity.class));
+
+                FloatingDrawer.this.finish();
+            }
+        });
     }
 
     @Override
     protected void onActivityResult(int requestCode,int resultCode,Intent data){
-        if(requestCode==CODE_DRAW_OVER_OTHER_APP_PERMISSION){
-            if (resultCode == RESULT_OK){
-                initializeView();
-            }
-            else{
-                Toast.makeText(getApplicationContext(),"Permission not granted",Toast.LENGTH_SHORT).show();
-                finish();
-            }
+
+        if (!Settings.canDrawOverlays(getApplicationContext())){
+
+            Toast.makeText(getApplicationContext(),"Permission not granted",Toast.LENGTH_SHORT).show();
         }
         else {
-            super.onActivityResult(requestCode,resultCode,data);
+            Toast.makeText(getApplicationContext(),"Permission granted",Toast.LENGTH_SHORT).show();
+            initializeView();
         }
     }
 }
