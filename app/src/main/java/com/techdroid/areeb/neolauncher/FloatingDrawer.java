@@ -38,14 +38,7 @@ public class FloatingDrawer extends Activity {
             }
         });
 
-        findViewById(R.id.set_desktop).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(FloatingDrawer.this, DesktopActivity.class));
 
-                FloatingDrawer.this.finish();
-            }
-        });
     }
 
     @Override

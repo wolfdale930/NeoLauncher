@@ -19,12 +19,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".DesktopActivity"
-            android:theme="@style/DesktopTheme"
-            android:excludeFromRecents="true"
-            android:launchMode="singleTask"
-            android:stateNotNeeded="true">
-        </activity>
         <service android:name=".FloatingViewService"
             android:enabled="true"
             android:exported="false"/>

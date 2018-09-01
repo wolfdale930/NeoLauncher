@@ -66,6 +66,7 @@ public class FloatingViewService extends Service {
         DisplayMetrics dm = new DisplayMetrics();
         windowManager.getDefaultDisplay().getMetrics(dm);
         w_resolution = dm.widthPixels;
+
         ///////////Loading Launchable Apps/////////////////////
         loadApps();
         ////////////////////Setting adapter///////////////////////
@@ -110,6 +111,7 @@ public class FloatingViewService extends Service {
                         windowManager.updateViewLayout(floatingView,params);
                         return true;
                     case MotionEvent.ACTION_UP:
+
                         if (params.x <= w_resolution/2){
                             params.x = 0;
                             windowManager.updateViewLayout(floatingView,params);
